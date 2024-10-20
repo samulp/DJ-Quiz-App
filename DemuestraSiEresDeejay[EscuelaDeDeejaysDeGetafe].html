@@ -1,0 +1,110 @@
+// DemuestraSiEresDeejay[EscuelaDeDeejaysDeGetafe].html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESCUELA DE DEEJAYS DE GETAFE</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #1a1a1a; color: #fff; text-align: center; margin: 0; padding: 0; }
+    .container { margin: 20px; }
+    .question { font-size: 20px; margin: 10px; }
+    .choices button { background-color: #ff6600; color: #fff; padding: 10px; margin: 10px; border: none; width: 80%; }
+    #score, #timer { font-size: 18px; margin: 10px; }
+    img { max-width: 100%; height: auto; margin: 10px auto; display: none; }
+    @media only screen and (min-width: 600px) {
+      .question { font-size: 24px; margin: 20px; }
+      .choices button { padding: 10px 20px; width: auto; }
+      #score, #timer { font-size: 20px; margin: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>ESCUELA DE DEEJAYS DE GETAFE</h1>
+    <div id="question-container" class="question">Pregunta aparecerá aquí</div>
+    <img id="question-image" src="" alt="Imagen relacionada con la pregunta">
+    <div id="choices-container" class="choices">
+      <button class="choice-button" onclick="checkAnswer(0)">Opción 1</button>
+      <button class="choice-button" onclick="checkAnswer(1)">Opción 2</button>
+      <button class="choice-button" onclick="checkAnswer(2)">Opción 3</button>
+      <button class="choice-button" onclick="checkAnswer(3)">Opción 4</button>
+    </div>
+    <div id="score">Puntuación: 0</div>
+    <div id="timer">Tiempo restante: 15</div>
+  </div>
+
+  <script>
+    const questions = [
+      { question: "¿Qué es un BPM en música electrónica?", choices: ["Beat per Minute", "Bits per Minute", "Bass per Minute", "Beats per Master"], answer: 0 },
+      { question: "¿Qué es un drop en una canción de EDM?", choices: ["El inicio de la canción", "Una pausa repentina", "La parte más enérgica", "El final de la canción"], answer: 2 },
+      { question: "¿Quién es considerado el padre de la música house?", choices: ["David Guetta", "Deadmau5", "Frankie Knuckles", "Avicii"], answer: 2, img: "frankie_knuckles.jpg" },
+      { question: "¿Qué software es comúnmente utilizado por DJs para mezclar música?", choices: ["Photoshop", "Serato DJ", "Final Cut Pro", "Microsoft Word"], answer: 1 },
+      { question: "¿Qué es un remix?", choices: ["Un estilo de baile", "Una versión modificada de una canción", "Un tipo de sintetizador", "Un tipo de altavoz"], answer: 1, img: "remix.jpg" },
+      { question: "¿Qué significa 'EDM'?", choices: ["Electronic Dance Music", "Electric Digital Music", "Electronic Disco Movement", "Electronic Data Management"], answer: 0 },
+      { question: "¿Cuál es el nombre de un famoso festival de música electrónica en Bélgica?", choices: ["Tomorrowland", "Coachella", "Glastonbury", "Lollapalooza"], answer: 0, img: "tomorrowland.jpg" },
+      { question: "¿Qué DJ es conocido por usar una cabeza de ratón gigante?", choices: ["Skrillex", "Marshmello", "Deadmau5", "Tiesto"], answer: 2, img: "deadmau5.jpg" },
+      { question: "¿Qué es un 'synth' en música electrónica?", choices: ["Un tipo de micrófono", "Un sintetizador", "Un tipo de auricular", "Un altavoz"], answer: 1 },
+      { question: "¿Cuál es el nombre de una famosa discoteca en Ibiza?", choices: ["Fabric", "Berghain", "Pacha", "The Hacienda"], answer: 2 },
+      // Añade más preguntas aquí hasta tener 30
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let timer;
+
+    function showQuestion() {
+      if (currentQuestionIndex < questions.length) {
+        const currentQuestion = questions[currentQuestionIndex];
+        document.getElementById("question-container").textContent = currentQuestion.question;
+        document.querySelectorAll(".choice-button").forEach((button, index) => {
+          button.textContent = currentQuestion.choices[index];
+        });
+        if (currentQuestion.img) {
+          document.getElementById("question-image").src = currentQuestion.img;
+          document.getElementById("question-image").style.display = "block";
+        } else {
+          document.getElementById("question-image").style.display = "none";
+        }
+        startTimer();
+      } else {
+        showResults();
+      }
+    }
+
+    function checkAnswer(choiceIndex) {
+      clearInterval(timer);
+      const currentQuestion = questions[currentQuestionIndex];
+      if (choiceIndex === currentQuestion.answer) {
+        score++;
+        document.getElementById("score").textContent = `Puntuación: ${score}`;
+      }
+      currentQuestionIndex++;
+      showQuestion();
+    }
+
+    function startTimer() {
+      let timeLeft = 15;
+      document.getElementById("timer").textContent = `Tiempo restante: ${timeLeft}`;
+      timer = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").textContent = `Tiempo restante: ${timeLeft}`;
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          currentQuestionIndex++;
+          showQuestion();
+        }
+      }, 1000);
+    }
+
+    function showResults() {
+      document.getElementById("question-container").textContent = `¡Juego terminado! Tu puntuación es: ${score}`;
+      document.getElementById("choices-container").style.display = "none";
+      document.getElementById("timer").style.display = "none";
+      document.getElementById("question-image").style.display = "none";
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
